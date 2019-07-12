@@ -61,6 +61,11 @@ void payout::buy(name from, uint64_t in) {
     auto g = _global.get_or_create( _self, global_info{});
     g.last = from;
     g.ed += 30;
+    
+    in *= 90; in /= 100;
+    make_profit(in);
+    in /= 9;
+    g.pool += in;
     _global.set(g, _self);     
 }
 
