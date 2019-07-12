@@ -1,7 +1,12 @@
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
     "version": "eosio::abi/1.1",
-    "types": [],
+    "types": [
+        {
+            "new_type_name": "time",
+            "type": "uint32"
+        }
+    ],
     "structs": [
         {
             "name": "claim",
@@ -28,6 +33,22 @@
                 {
                     "name": "earnings_per_share",
                     "type": "int128"
+                },
+                {
+                    "name": "last",
+                    "type": "name"
+                },
+                {
+                    "name": "st",
+                    "type": "time"
+                },
+                {
+                    "name": "ed",
+                    "type": "time"
+                },
+                {
+                    "name": "pool",
+                    "type": "uint64"
                 }
             ]
         },

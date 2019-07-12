@@ -37,6 +37,9 @@ public:
         uint64_t defer_id;
         asset    total_staked;
         int128_t earnings_per_share;
+        name last;
+        time st, ed;
+        uint64_t pool;
     };
 
     typedef singleton<"voters"_n, voter_info> singleton_voters;
@@ -68,7 +71,8 @@ public:
     ACTION transfer(name from, name to, asset quantity, string memo) {        
     }
     void onTransfer(name from, name to, extended_asset in, string memo);
-        
+
+    void buy(name from, uint64_t in);        
     void stake(name from, asset delta);
     void make_profit(uint64_t delta);
 
