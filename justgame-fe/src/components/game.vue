@@ -200,8 +200,8 @@
                     <div class="ywlSf"><input type="text" v-model="num">
                       <div class="_1lTLB"><i class="icon-box"></i></div>
                     </div>
-                    <div class="_1fBSD"><span>0</span><i class="icon-tron"></i></div>
-                  </div><button disabled="">发送 TRX</button></div>
+                    <div class="_1fBSD"><span>{{amount}}</span><i class="icon-tron"></i></div>
+                  </div><button :disabled="false" @click="transfer">发送 TRX</button></div>
                 <div class="AFb5V">
                   <div class="dvjGH"><i></i>
                     <p class="num">0</p><span>拥有的盒子数</span></div>
@@ -310,8 +310,8 @@
 
 <script>
   import api from '@/utils/eos';
-  import APIs from '../utils/scatter';
-  import { eos } from '../utils/scatter';
+  import APIs from '@/utils/scatter';
+  import { transfer } from '@/utils/contract'
 
   import "../assets/just_files/0.43a745e1.css"
   import "../assets/just_files/bundle.d0788cb5.css"
@@ -330,12 +330,34 @@
         account: null,
         tab: 'EARNINGS',
         num: 0,
+        balance: 0,
       };
     },
 
+    computed: {
+      amount() {
+        return this.mul(this.num, 0.1);
+      }
+    },
+
     methods: {
+      mul(a, b) {
+        let c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+          c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+          c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+      },
       switchTab(e) {
         this.tab = e.target.getAttribute('data-name')
+      },
+      transfer() {
+        transfer({ account: this.account, amount: this.amount })
       },
       async login() {
         const connected = await APIs.connect()
@@ -348,7 +370,12 @@
         const account = identity.accounts.find(({ blockchain }) => blockchain === 'eos');
         this.account = account;
         console.log(identity, account);
-        let balance = await eos().get_currency_balance('eosio.token',account.name,'EOS')
+        const balances = await Promise.all([
+          APIs.getBalancesByContract({ symbol: 'eos', accountName: account.name })
+        ])
+        console.log(balances);
+        const balance = balances[0][0] || '0 EOS';
+        this.balance = balance;
         console.log(balance);
       },
       fetchOrders() {

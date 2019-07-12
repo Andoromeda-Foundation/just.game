@@ -4,7 +4,7 @@ import { eos } from './scatter'
 
 export const CONTRACT_ACCOUNT = 'just game'
 
-const transferEOS = ({ account = null, amount = 0, memo = '' }) => {
+export const transfer = ({ account = null, amount = 0, memo = '' }) => {
   if (!account) throw new Error('no account')
   return eos().transaction({
     actions: [
@@ -23,6 +23,25 @@ const transferEOS = ({ account = null, amount = 0, memo = '' }) => {
           quantity: `${amount.toFixed(4).toString()} EOS`,
           memo
         }
+      }
+    ]
+  })
+}
+
+export const open = ({ account = null }) => {
+  if (!account) throw new Error('no account')
+  return eos().transaction({
+    actions: [
+      {
+        account: CONTRACT_ACCOUNT,
+        name: 'claim',
+        authorization: [
+          {
+            actor: account.name,
+            permission: account.authority
+          }
+        ],
+        data: { from: account.name }
       }
     ]
   })
