@@ -68,6 +68,20 @@
             ]
         },
         {
+            "name": "player_info",
+            "base": "",
+            "fields": [
+                {
+                    "name": "staked",
+                    "type": "asset"
+                },
+                {
+                    "name": "payout",
+                    "type": "int64"
+                }
+            ]
+        },
+        {
             "name": "transfer",
             "base": "",
             "fields": [
@@ -110,24 +124,6 @@
                 {
                     "name": "from",
                     "type": "name"
-                }
-            ]
-        },
-        {
-            "name": "voter_info",
-            "base": "",
-            "fields": [
-                {
-                    "name": "to",
-                    "type": "name"
-                },
-                {
-                    "name": "staked",
-                    "type": "asset"
-                },
-                {
-                    "name": "payout",
-                    "type": "int64"
                 }
             ]
         }
@@ -173,8 +169,8 @@
             "key_types": []
         },
         {
-            "name": "voter_info",
-            "type": "voter_info",
+            "name": "player_info",
+            "type": "player_info",
             "index_type": "i64",
             "key_names": [],
             "key_types": []

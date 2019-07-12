@@ -18,20 +18,20 @@ void payout::make_profit(uint64_t delta) {
 void payout::stake(name from, asset delta) {
     require_auth(from);
     // eosio_assert(delta.amount > 0, "must stake a positive amount");
-    singleton_voters _voters(_self, from.value);
-    auto v = _voters.get_or_create(_self, voter_info{});
+    singleton_players _players(_self, from.value);
+    auto v = _players.get_or_create(_self, player_info{});
     auto g = _global.get();
     v.staked += delta;
     v.payout += g.earnings_per_share * delta.amount / MAGNITUDE;
-    _voters.set(v, _self);
+    _players.set(v, _self);
     g.total_staked += delta;
     _global.set(g, _self);
 }
 
 void payout::unstake(name from, asset delta) {
     require_auth(from);
-    singleton_voters _voters(_self, from.value);
-    auto v = _voters.get_or_create(_self, voter_info{});
+    singleton_players _players(_self, from.value);
+    auto v = _players.get_or_create(_self, player_info{});
     auto g = _global.get();
     // eosio_assert(delta <= v.staked, "don't have enough token for unstake");
 
@@ -42,14 +42,14 @@ void payout::unstake(name from, asset delta) {
     }
 
     v.staked -= delta;
-    _voters.set(v, _self);    
+    _players.set(v, _self);    
 }
 
 void payout::open(name from) {
     require_auth(from);   
     claim(from);
-    singleton_voters _voters(_self, from.value);    
-    auto v = _voters.get_or_create(_self, voter_info{});     
+    singleton_players _players(_self, from.value);    
+    auto v = _players.get_or_create(_self, player_info{});     
     unstake(from, v.staked);
 }
 
@@ -71,8 +71,8 @@ void payout::buy(name from, uint64_t in) {
 
 void payout::upgrade(name from) {
     require_auth(from);
-    singleton_voters _voters(_self, from.value);
-    auto v = _voters.get_or_create(_self, voter_info{});
+    singleton_players _players(_self, from.value);
+    auto v = _players.get_or_create(_self, player_info{});
     auto g = _global.get();
 
     // TODO(minakokojima): unvote(v);
@@ -81,15 +81,15 @@ void payout::upgrade(name from) {
     if (raw_payout > v.payout) delta.amount = raw_payout - v.payout;
 
     v.payout = raw_payout;
-    _voters.set(v, _self);
+    _players.set(v, _self);
 
     buy(from, delta.amount > 0);
 }
 
 void payout::claim(name from) {
     require_auth(from);
-    singleton_voters _voters(_self, from.value);
-    auto v = _voters.get_or_create(_self, voter_info{});
+    singleton_players _players(_self, from.value);
+    auto v = _players.get_or_create(_self, player_info{});
     auto g = _global.get();
 
     // TODO(minakokojima): unvote(v);
@@ -98,7 +98,7 @@ void payout::claim(name from) {
     if (raw_payout > v.payout) delta.amount = raw_payout - v.payout;
 
     v.payout = raw_payout;
-    _voters.set(v, _self);
+    _players.set(v, _self);
 
     if (delta.amount > 0) {
         action(

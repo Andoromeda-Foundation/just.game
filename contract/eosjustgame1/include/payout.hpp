@@ -27,8 +27,7 @@ public:
         _global(receiver, receiver.value) {
     }
 
-    TABLE voter_info {
-        name     to;
+    TABLE player_info {
         asset    staked;
         int64_t  payout;        
     };
@@ -42,7 +41,7 @@ public:
         uint64_t pool;
     };
 
-    typedef singleton<"voters"_n, voter_info> singleton_voters;
+    typedef singleton<"players"_n, player_info> singleton_players;
     typedef singleton<"global"_n, global_info> singleton_global;
 
     singleton_global _global;
