@@ -19,7 +19,8 @@
           </div>
           <div class="_1AlxN">
             <div class="_3H5Ef">
-              <div class="_1fto3">TCWg6...sSCsQ</div>
+              <div class="_1fto3" @click="login" v-if="account">{{account.name}}</div>
+              <div class="_1fto3" @click="login" v-else>登录</div>
             </div>
             <li class="_2IsC_">
               <div class="_3H5Ef">
@@ -160,11 +161,13 @@
             </div>
           </div>
           <div class="_3QV-A">
-            <div class="_3Wt4G"><span data-name="START" class="">开始</span><span data-name="EARNINGS" class="_1h8_m">盈利</span>
-              <span data-name="PROMOTE" class="">推广</span>
+            <div class="_3Wt4G">
+              <span data-name="START" class="" @click="switchTab($event)">开始</span>
+              <span data-name="EARNINGS" class="_1h8_m" @click="switchTab($event)">盈利</span>
+              <span data-name="PROMOTE" class="" @click="switchTab($event)">推广</span>
             </div>
             <!--开始-->
-            <!--<div>
+            <div v-if="tab === 'START'">
               <div class="_1z5hK">
                 <div class="xuznu">
                   <div class="_2JBtC">
@@ -187,14 +190,14 @@
                   </a>
                 </div>
               </div>
-            </div>-->
+            </div>
             <!--盈利-->
-            <div>
+            <div v-if="tab === 'EARNINGS'">
               <div class="t9Lfd">
                 <div class="_2x61W"><i class="icon-box _1MDIr"></i>
                   <div class="_1J4O_"><i>0 礼物盒你可以购买</i></div>
                   <div class="_3R_3Z">
-                    <div class="ywlSf"><input type="text" value="0">
+                    <div class="ywlSf"><input type="text" v-model="num">
                       <div class="_1lTLB"><i class="icon-box"></i></div>
                     </div>
                     <div class="_1fBSD"><span>0</span><i class="icon-tron"></i></div>
@@ -214,13 +217,13 @@
               </div>
             </div>
             <!--推广-->
-            <!--<div>
+            <div v-if="tab === 'PROMOTE'">
               <div class="UjuEG">
                 <div class="rGAjU">https://justgame.vip/TCWg6pCqmcwHXcaEFJEZdKcU7QdeZsSCsQ</div>
                 <div class="sOtJx">复制</div>
                 <div class="oGArP">我的收益：<span class="num">0</span> TRX</div>
               </div>
-            </div>-->
+            </div>
             
           </div>
         </div>
@@ -307,26 +310,51 @@
 
 <script>
   import api from '@/utils/eos';
+  import APIs from '../utils/scatter';
+  import { eos } from '../utils/scatter';
 
   import "../assets/just_files/0.43a745e1.css"
   import "../assets/just_files/bundle.d0788cb5.css"
 
   export default {
     mounted() {
-      setInterval(this.fetchOrders, 1000);
+      //setInterval(this.fetchOrders, 1000);
+      document.addEventListener('scatterLoaded', () => {
+        this.login();
+      });
     },
 
     data() {
       return {
-        orders: []
+        orders: [],
+        account: null,
+        tab: 'EARNINGS',
+        num: 0,
       };
     },
 
     methods: {
+      switchTab(e) {
+        this.tab = e.target.getAttribute('data-name')
+      },
+      async login() {
+        const connected = await APIs.connect()
+        /*if (!connected) {
+          const account = APIs.account();
+          console.log(account);
+          APIs.suggestNetworkAsync().then(added => console.log('🛸Scatter🛸 suggest network result: ', added))
+        }*/
+        const identity = await APIs.loginScatterAsync();
+        const account = identity.accounts.find(({ blockchain }) => blockchain === 'eos');
+        this.account = account;
+        console.log(identity, account);
+        let balance = await eos().get_currency_balance('eosio.token',account.name,'EOS')
+        console.log(balance);
+      },
       fetchOrders() {
         api.getActions('joetothemoon', -1, -20).then(({ actions }) => {
           
-          console.log("xxx");
+          //console.log("xxx");
         });
       },
 
