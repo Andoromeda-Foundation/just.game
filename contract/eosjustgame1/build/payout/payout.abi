@@ -1,13 +1,18 @@
 {
     "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
     "version": "eosio::abi/1.1",
-    "types": [
-        {
-            "new_type_name": "time",
-            "type": "uint32"
-        }
-    ],
+    "types": [],
     "structs": [
+        {
+            "name": "claim",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                }
+            ]
+        },
         {
             "name": "global_info",
             "base": "",
@@ -27,16 +32,63 @@
             ]
         },
         {
-            "name": "refund_request",
+            "name": "init",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "open",
             "base": "",
             "fields": [
                 {
-                    "name": "request_time",
-                    "type": "time"
+                    "name": "from",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "transfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
                 },
                 {
-                    "name": "amount",
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
                     "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "unstake",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "delta",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "upgrade",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
                 }
             ]
         },
@@ -59,18 +111,42 @@
             ]
         }
     ],
-    "actions": [],
+    "actions": [
+        {
+            "name": "claim",
+            "type": "claim",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "init",
+            "type": "init",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "open",
+            "type": "open",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transfer",
+            "type": "transfer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "unstake",
+            "type": "unstake",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "upgrade",
+            "type": "upgrade",
+            "ricardian_contract": ""
+        }
+    ],
     "tables": [
         {
             "name": "global_info",
             "type": "global_info",
-            "index_type": "i64",
-            "key_names": [],
-            "key_types": []
-        },
-        {
-            "name": "refund_request",
-            "type": "refund_request",
             "index_type": "i64",
             "key_names": [],
             "key_types": []

@@ -108,7 +108,7 @@ class stringSplitter {
           *result = 0;
           char ch;
           while (get_char(&ch)) {
-              eosio_assert(ch >= '0' && ch <= '9', "Should be a valid number");
+              // eosio_assert(ch >= '0' && ch <= '9', "Should be a valid number");
               *result = *result * 10 + ch - '0';
           }
           skip_empty();
