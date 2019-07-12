@@ -1,0 +1,88 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [
+        {
+            "new_type_name": "time",
+            "type": "uint32"
+        }
+    ],
+    "structs": [
+        {
+            "name": "global_info",
+            "base": "",
+            "fields": [
+                {
+                    "name": "defer_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "total_staked",
+                    "type": "asset"
+                },
+                {
+                    "name": "earnings_per_share",
+                    "type": "int128"
+                }
+            ]
+        },
+        {
+            "name": "refund_request",
+            "base": "",
+            "fields": [
+                {
+                    "name": "request_time",
+                    "type": "time"
+                },
+                {
+                    "name": "amount",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "voter_info",
+            "base": "",
+            "fields": [
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "staked",
+                    "type": "asset"
+                },
+                {
+                    "name": "payout",
+                    "type": "int64"
+                }
+            ]
+        }
+    ],
+    "actions": [],
+    "tables": [
+        {
+            "name": "global_info",
+            "type": "global_info",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "refund_request",
+            "type": "refund_request",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "voter_info",
+            "type": "voter_info",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}

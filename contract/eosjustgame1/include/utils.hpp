@@ -1,5 +1,4 @@
-#pragma once
-#include <eosiolib/symbol.hpp>
+﻿#pragma once
 #include <string>
 #include <vector>
 #include "config.hpp"
@@ -7,23 +6,6 @@
 using namespace eosio;
 using namespace std;
 
-typedef uint32_t time;
-
-struct st_transfer {
-    name from;
-    name to;
-    asset        quantity;
-    string       memo;
-
-    EOSLIB_SERIALIZE( st_transfer, (from)(to)(quantity)(memo) )
-};
-/*
-struct account {
-    asset    balance;
-    uint64_t primary_key()const { return balance.amount; }
-};
-typedef eosio::multi_index<"accounts"_n, account> accounts_t;
-*/
 const vector<string> split(const string& s, const char& t) {
     string buff;
     vector<string> z;
@@ -37,6 +19,19 @@ const vector<string> split(const string& s, const char& t) {
     }
     if (!buff.empty()) z.push_back(buff);
     return z;
+}
+
+const vector<string> explode(const string& s, const char& c) {
+    string buff{""};
+    vector<string> v;
+
+    for(auto n:s) {
+        if(n != c) buff+=n; 
+        else if(n == c && buff != "") { v.push_back(buff); buff = ""; }
+    }
+    if(buff != "") v.push_back(buff);
+
+    return v;
 }
 
 uint64_t string_to_price(string s) {

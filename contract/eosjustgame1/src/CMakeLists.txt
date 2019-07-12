@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
-project(eosjustgame1)
+project(payout VERSION 1.0.0)
 
 set(EOSIO_WASM_OLD_BEHAVIOR "Off")
 find_package(eosio.cdt)
 
-add_contract( eosjustgame1 eosjustgame1 eosjustgame1.cpp )
-target_include_directories( eosjustgame1 PUBLIC ${CMAKE_SOURCE_DIR}/../include )
+### generate both the wasm and abi
+add_contract( payout payout payout.cpp )
+target_include_directories( payout PUBLIC ${CMAKE_SOURCE_DIR}/../include )
