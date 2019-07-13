@@ -35,7 +35,7 @@ CONTRACT eosjustgame1 : public contract
 
       ACTION rungame();
 
-      ACTION init();
+      ACTION init(uint32_t start);
 
       ACTION clean();
 

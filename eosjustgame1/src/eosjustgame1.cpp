@@ -29,7 +29,6 @@ void eosjustgame1::handle_transfer(name from, name to, asset quantity, string me
 // 处理买盒子逻辑
 void eosjustgame1::buy(name user, asset quantity, name ref)
 {
-
     check_game_available();
 
     check(quantity.amount >= 1000, "pay more than 0.1 EOS to buy a box");
@@ -81,7 +80,7 @@ void eosjustgame1::check_game_available()
     check(pool->end >= now, "game is end.");
 }
 
-void eosjustgame1::init()
+void eosjustgame1::init(uint32_t start)
 {
     require_auth(_self);
 
@@ -89,9 +88,10 @@ void eosjustgame1::init()
 
     check(pool == _pool.end(), "game has init");
 
-    uint32_t EXPIRE_SEC = 60 * 60 * 12; // 订单有效时
+    // uint32_t EXPIRE_SEC = 60 * 60 * 12; 
+    uint32_t EXPIRE_SEC = 90 ;
 
-    uint32_t start_sec = 1563019200;
+    uint32_t start_sec = start;
 
     static const time_point_sec create_time{start_sec};
     static const time_point_sec expire_time{start_sec + EXPIRE_SEC};
