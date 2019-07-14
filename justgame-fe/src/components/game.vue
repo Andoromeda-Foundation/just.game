@@ -8,7 +8,7 @@
             <li class="_2vjT2"><a href="https://endless.game/" target="_blank"><i></i></a></li>
             <li class="m48b6">
               <div class="_3H5Ef">
-                <div class="_1fto3">规则</div>
+                <div class="_1fto3" @click="ruleModal = true">规则</div>
               </div>
             </li>
           </ul>
@@ -39,25 +39,25 @@
               <p>用户收益</p>
               <p class="_26FMC _38zqW">1,306,690.00 <i class="icon-tron"></i></p>
               <p class="num">$ 37,306.00</p>
-            </div><span class="_1654l">?</span></div>
+            </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3FOJt"></i>
             <div>
               <p>100 赢家奖励</p>
               <p class="_26FMC _2YYit">1,862,529.81 <i class="icon-tron"></i></p>
               <p class="num">$ 53,175.23</p>
-            </div><span class="_1654l">?</span></div>
+            </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3AEek"></i>
             <div>
               <p>最后一人大奖</p>
               <p class="_26FMC _33khv">190,403.40 <i class="icon-tron"></i></p>
               <p class="num">$ 5,436.02</p>
-            </div><span class="_1654l">?</span></div>
+            </div><span class="_1654l" @click="tokenModal=true">?</span></div>
         </div>
         <div class="_3Nrlz">
           <div class="_1JTs3">
             <div class="_3kXmz">
               <p>收集礼物盒</p>
-              <p class="_2GkKL">它们的价值只会增长！</p><span>?</span></div>
+              <p class="_2GkKL">它们的价值只会增长！</p><span  @click="ruleModal = true">?</span></div>
             <div class="_1oJZk">
               <div></div><i>最后 100 人</i>
               <div></div>
@@ -162,9 +162,9 @@
           </div>
           <div class="_3QV-A">
             <div class="_3Wt4G">
-              <span data-name="START" class="" @click="switchTab($event)">开始</span>
-              <span data-name="EARNINGS" class="_1h8_m" @click="switchTab($event)">盈利</span>
-              <span data-name="PROMOTE" class="" @click="switchTab($event)">推广</span>
+              <span data-name="START" :class="{'_1h8_m': tab === 'START'}" @click="switchTab($event)">开始</span>
+              <span data-name="EARNINGS" :class="{'_1h8_m': tab === 'EARNINGS'}" @click="switchTab($event)">盈利</span>
+              <span data-name="PROMOTE" :class="{'_1h8_m': tab === 'PROMOTE'}" @click="switchTab($event)">推广</span>
             </div>
             <!--开始-->
             <div v-if="tab === 'START'">
@@ -174,17 +174,17 @@
                     <p class="_3yBp5">如何开始盈利</p>
                     <p class="_27Bto">点击 ? 了解我的更多信息！</p>
                   </div>
-                  <div class="_2_uun _190vv"></div>
-                  <div class="_1V_a8 _190vv"></div>
-                  <div class="_1UNBE _190vv"></div>
+                  <div class="_2_uun _190vv" @click="ruleModal=true"></div>
+                  <div class="_1V_a8 _190vv" @click="ruleModal=true"></div>
+                  <div class="_1UNBE _190vv" @click="ruleModal=true"></div>
                 </div>
                 <div class="_2Sdx-">
                   <p class="_3yBp5">了解如何盈利</p>
                   <p class="_3DVmJ">JUST GAME</p>
                   <p class="_27Bto">我把所有的服务收益都给到用户，就像你一样！</p>
-                  <div class="_2Fyve _190vv"></div>
-                  <div class="_1RSxs _190vv"></div>
-                  <div class="_1IWqe _190vv"></div>
+                  <div class="_2Fyve _190vv" @click="ruleModal=true"></div>
+                  <div class="_1RSxs _190vv" @click="ruleModal=true"></div>
+                  <div class="_1IWqe _190vv" @click="ruleModal=true"></div>
                   <a href="https://t.me/justgamediscuss" target="_blank">
                     <div class="_77us7 _190vv"></div>
                   </a>
@@ -209,9 +209,9 @@
                     <p class="num">0.00</p><span>TRX 在你的盒子里</span></div>
                 </div>
                 <div class="_20_oo">
-                  <div class="_11eyq"><button class="_2koZ-" disabled=""><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
+                  <div class="_11eyq"><button class="_2koZ-" disabled="" @click="open"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
                     <p>你的奖励</p><span class="num">0.00 TRX</span></div>
-                  <div class="_11eyq"><button class="_2koZ-" disabled=""><i></i><span>升级盒子</span></button>
+                  <div class="_11eyq"><button class="_2koZ-" disabled="" @click="upgrade"><i></i><span>升级盒子</span></button>
                     <p>股权增加</p><span class="num">0% +</span></div>
                 </div>
               </div>
@@ -231,9 +231,9 @@
           <div class="_36W14"><i class="B4Kz_"></i><i class="_2e2AS"></i></div>
           <a href="https://t.me/justgamediscuss" target="_blank" class="_2Q3-j"></a>
         </div>
-        <div class="_3D9VK">
+        <div class="_3D9VK" v-show="ruleModal">
           <div class="_3Eaez"></div>
-          <div class="_1nKxi"><i class="_1T42u"></i>
+          <div class="_1nKxi"><i class="_1T42u" @click="ruleModal=false"></i>
             <div class="_20swm">
               <h3>justgame.vip的游戏介绍</h3>
               <ul>
@@ -285,9 +285,9 @@
             </div>
           </div>
         </div>
-        <div class="_18z8M">
+        <div class="_18z8M" v-show="tokenModal">
           <div class="Z8QHv"></div>
-          <div class="_108_n"><i class="_3w9f_"></i>
+          <div class="_108_n"><i class="_3w9f_" @click="tokenModal=false"></i>
             <div class="_2Lyvp">
               <h3>玩家购买每个盒子，购买资金做如下分配：</h3>
               <ul>
@@ -331,6 +331,8 @@
         tab: 'EARNINGS',
         num: 0,
         balance: 0,
+        ruleModal: false,
+        tokenModal: false
       };
     },
 
@@ -341,17 +343,11 @@
     },
 
     methods: {
-      mul(a, b) {
-        let c = 0,
-            d = a.toString(),
-            e = b.toString();
-        try {
-          c += d.split(".")[1].length;
-        } catch (f) {}
-        try {
-          c += e.split(".")[1].length;
-        } catch (f) {}
-        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+      open() {
+
+      },
+      upgrade() {
+
       },
       switchTab(e) {
         this.tab = e.target.getAttribute('data-name')
@@ -360,7 +356,9 @@
         transfer({ account: this.account, amount: this.amount })
       },
       async login() {
+        console.log('login');
         const connected = await APIs.connect()
+        console.log(connected);
         /*if (!connected) {
           const account = APIs.account();
           console.log(account);
@@ -387,7 +385,19 @@
 
       dateFormat(raw) {
         return new Date(raw + 'Z').toLocaleTimeString();
-      }
+      },
+      mul(a, b) {
+        let c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+          c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+          c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+      },
     }
   };
 
