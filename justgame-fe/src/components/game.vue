@@ -13,9 +13,9 @@
             </li>
           </ul>
           <div class="BNC_Y">
-            <div class="_31aGn _1jpIb"><button data-symbol="tron" class="aVqXZ"><em>tron</em></button></div>
-            <div class="_1jpIb"><button data-symbol="eth" class="_3Nh_x"><em>eth</em></button></div>
-            <div class="_1jpIb"><button data-symbol="iost" class="_3BTsd"><em>iost</em></button></div>
+            <div class="_31aGn _1jpIb"><button data-symbol="tron" class="aVqXZ"><em>EOS</em></button></div>
+            <!--<div class="_1jpIb"><button data-symbol="eth" class="_3Nh_x"><em>eth</em></button></div>
+            <div class="_1jpIb"><button data-symbol="iost" class="_3BTsd"><em>iost</em></button></div>-->
           </div>
           <div class="_1AlxN">
             <div class="_3H5Ef">
@@ -43,13 +43,13 @@
           <div class="_2gSpK"><i class="_3FOJt"></i>
             <div>
               <p>100 赢家奖励</p>
-              <p class="_26FMC _2YYit">1,862,529.81 <i class="icon-tron"></i></p>
+              <p class="_26FMC _2YYit">{{global.last100_prize}} <i class="icon-tron"></i></p>
               <p class="num">$ 53,175.23</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3AEek"></i>
             <div>
               <p>最后一人大奖</p>
-              <p class="_26FMC _33khv">190,403.40 <i class="icon-tron"></i></p>
+              <p class="_26FMC _33khv">{{global.big_prize}} <i class="icon-tron"></i></p>
               <p class="num">$ 5,436.02</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
         </div>
@@ -63,92 +63,21 @@
               <div></div>
             </div>
             <div class="_20Hb6">
-              <div class="_34sLi"><i class="KoA2O">1</i>
+              <div class="_34sLi" v-for="(item, i) in last100_player" :key="i">
+                <i class="KoA2O">{{i + 1}}</i>
                 <div class="_1_QYn">
                   <ul>
                     <li class="_2gMYE"><i>已购买</i></li>
-                    <li class="num LzVNT">10</li>
+                    <li class="num LzVNT">{{item.box}}</li>
                     <li><i class="icon-box"></i></li>
                   </ul>
                   <ul>
-                    <li class="_2gMYE">TKaWLffbmDfdwAiSbEN2uu5mBK4wXCYtb4</li>
-                    <li class="num LzVNT">0.01</li>
+                    <li class="_2gMYE">{{item.user}}</li>
+                    <li class="num LzVNT">{{item.pay}}</li>
                     <li><i class="icon-tron"></i></li>
                   </ul>
                   <ul>
-                    <li class="_2gMYE"><i><span class="num">+190,403.40</span> TRX</i></li>
-                    <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="_34sLi"><i class="KoA2O">2</i>
-                <div class="_1_QYn">
-                  <ul>
-                    <li class="_2gMYE"><i>已购买</i></li>
-                    <li class="num LzVNT">357</li>
-                    <li><i class="icon-box"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE">TDkkzH6EizBHxdoGhDonxE3ZSyoFUR3941</li>
-                    <li class="num LzVNT">7,748.67</li>
-                    <li><i class="icon-tron"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE"><i><span class="num">+3,733.40</span> TRX</i></li>
-                    <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="_34sLi"><i class="KoA2O">3</i>
-                <div class="_1_QYn">
-                  <ul>
-                    <li class="_2gMYE"><i>已购买</i></li>
-                    <li class="num LzVNT">395</li>
-                    <li><i class="icon-box"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE">TS1KgJv46KekS4TZAewhfdyc3LqE89XhSN</li>
-                    <li class="num LzVNT">7,635.11</li>
-                    <li><i class="icon-tron"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE"><i><span class="num">+3,733.40</span> TRX</i></li>
-                    <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="_34sLi"><i class="KoA2O">4</i>
-                <div class="_1_QYn">
-                  <ul>
-                    <li class="_2gMYE"><i>已购买</i></li>
-                    <li class="num LzVNT">13</li>
-                    <li><i class="icon-box"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE">TFmwyPpLfxqn3XRRzniwAAVQ6umiZXeDLf</li>
-                    <li class="num LzVNT">5.45</li>
-                    <li><i class="icon-tron"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE"><i><span class="num">+3,733.40</span> TRX</i></li>
-                    <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="_34sLi"><i class="KoA2O">5</i>
-                <div class="_1_QYn">
-                  <ul>
-                    <li class="_2gMYE"><i>已购买</i></li>
-                    <li class="num LzVNT">2</li>
-                    <li><i class="icon-box"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE">TPA3guGZuc9dpHueiBHuRN7VeMoL3sg71c</li>
-                    <li class="num LzVNT">0.40</li>
-                    <li><i class="icon-tron"></i></li>
-                  </ul>
-                  <ul>
-                    <li class="_2gMYE"><i><span class="num">+3,733.40</span> TRX</i></li>
+                    <li class="_2gMYE"><i><span class="num">+{{item.mask.toFixed(2)}}</span> EOS</i></li>
                     <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
                   </ul>
                 </div>
@@ -201,16 +130,16 @@
                       <div class="_1lTLB"><i class="icon-box"></i></div>
                     </div>
                     <div class="_1fBSD"><span>{{amount}}</span><i class="icon-tron"></i></div>
-                  </div><button :disabled="false" @click="transfer">发送 TRX</button></div>
+                  </div><button :disabled="false" @click="transfer">发送 EOS</button></div>
                 <div class="AFb5V">
                   <div class="dvjGH"><i></i>
-                    <p class="num">0</p><span>拥有的盒子数</span></div>
+                    <p class="num">{{myBox.length}}</p><span>拥有的盒子数</span></div>
                   <div class="dvjGH"><i></i>
-                    <p class="num">0.00</p><span>TRX 在你的盒子里</span></div>
+                    <p class="num">0.00</p><span>EOS 在你的盒子里</span></div>
                 </div>
                 <div class="_20_oo">
-                  <div class="_11eyq"><button class="_2koZ-" disabled="" @click="open"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
-                    <p>你的奖励</p><span class="num">0.00 TRX</span></div>
+                  <div class="_11eyq"><button class="_2koZ-" @click="open"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
+                    <p>你的奖励</p><span class="num">0.00 EOS</span></div>
                   <div class="_11eyq"><button class="_2koZ-" disabled="" @click="upgrade"><i></i><span>升级盒子</span></button>
                     <p>股权增加</p><span class="num">0% +</span></div>
                 </div>
@@ -221,10 +150,10 @@
               <div class="UjuEG">
                 <div class="rGAjU">https://justgame.vip/TCWg6pCqmcwHXcaEFJEZdKcU7QdeZsSCsQ</div>
                 <div class="sOtJx">复制</div>
-                <div class="oGArP">我的收益：<span class="num">0</span> TRX</div>
+                <div class="oGArP">我的收益：<span class="num">0</span> EOS</div>
               </div>
             </div>
-            
+
           </div>
         </div>
         <div class="_1Aumt">
@@ -264,18 +193,18 @@
 
               <h3>怎么玩</h3>
               <ul>
-                <li>Just Game 分为 TRX 和 ETH 2 个版本，除了使用的钱包插件和礼物盒价格不同，其他游戏规则一致，两边游戏分别计时。</li>
+                <li>Just Game 为 EOS 版本，除了使用的钱包插件和礼物盒价格不同，其他游戏规则一致，两边游戏分别计时。</li>
                 <li>
                   <ul>
-                    <li>TRX 版本，您需要首先安装
+                    <li>EOS 版本，您需要首先安装
                       <a href="https://chrome.google.com/webstore/detail/tronlink%EF%BC%88%E6%B3%A2%E5%AE%9D%E9%92%B1%E5%8C%85%EF%BC%89/ibnejdfjmmkpcnlpebklmnkoeoihofec"
-                        target="_blank">Tronlink 插件</a>，每个的礼物盒价格为 25 TRX； </li>
-                    <li>ETH 版本，您需要首先安装
+                        target="_blank">Scatter 插件</a>，每个的礼物盒价格为 0.001 EOS； </li>
+                    <!--<li>ETH 版本，您需要首先安装
                       <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">MetaMask 插件</a>，每个的礼物盒价格为
                       0.0025 ETH；</li>
                     <li>IOST 版本，您需要首先安装
                       <a href="https://chrome.google.com/webstore/detail/iwallet/kncchdigobghenbbaddojjnnaogfppfj" target="_blank">iWallet 插件</a>，每个的礼物盒价格为
-                      25 IOST</li>
+                      25 IOST</li>-->
                   </ul>
                 </li>
                 <li>在“开始”查看游戏引导。</li>
@@ -311,7 +240,7 @@
 <script>
   import api from '@/utils/eos';
   import APIs from '@/utils/scatter';
-  import { transfer } from '@/utils/contract'
+  import { transfer, open, info } from '@/utils/contract'
 
   import "../assets/just_files/0.43a745e1.css"
   import "../assets/just_files/bundle.d0788cb5.css"
@@ -332,28 +261,59 @@
         num: 0,
         balance: 0,
         ruleModal: false,
-        tokenModal: false
+        tokenModal: false,
+        websocket: null,
+        last100_player: [],
+        history: [],
+        global: {
+          big_prize: 0,
+          last100_prize: 0,
+        },
+        myBox: []
       };
     },
 
     computed: {
       amount() {
-        return this.mul(this.num, 0.1);
+        return this.mul(this.num, 0.01);
       }
     },
-
+    created(){
+      //页面刚进入时开启长连接
+      this.initWebSocket()
+    },
+    destroyed() {
+      //页面销毁时关闭长连接
+      // this.websocketclose();
+    },
     methods: {
-      open() {
+      initWebSocket(){
+        //初始化weosocket
+        let socket = require('socket.io-client')('https://wss.eos-justgame.cn');
+        socket.on('connect', function () {
+          console.log('ws connect')
+        });
 
+        socket.on('disconnect', function () {
+          console.log('ws disconnect')
+        });
+
+        socket.on('gamestatus', (msg) => {
+          this.history = msg.history;
+          this.last100_player = msg.last100_player;
+          this.global = msg.global;
+        });
+      },
+      open() {
+        open({ account: this.account })
       },
       upgrade() {
-
       },
       switchTab(e) {
         this.tab = e.target.getAttribute('data-name')
       },
       transfer() {
-        transfer({ account: this.account, amount: this.amount })
+        transfer({ account: this.account, amount: this.amount, memo: 'buy-' }).then((data) => console.log(data)).catch((error) => console.log(error))
       },
       async login() {
         console.log('login');
@@ -375,10 +335,14 @@
         const balance = balances[0][0] || '0 EOS';
         this.balance = balance;
         console.log(balance);
+        await this.getMyBox();
+      },
+      async getMyBox() {
+        this.myBox = await info.getMyBoxAsync(this.account.name);
       },
       fetchOrders() {
         api.getActions('joetothemoon', -1, -20).then(({ actions }) => {
-          
+
           //console.log("xxx");
         });
       },
@@ -404,5 +368,5 @@
 </script>
 
 <style scoped>
- 
+
 </style>
