@@ -47,6 +47,25 @@ export const open = ({ account = null }) => {
   })
 }
 
+export const upgrade = ({ account = null }) => {
+  if (!account) throw new Error('no account')
+  return eos().transaction({
+    actions: [
+      {
+        account: CONTRACT_ACCOUNT,
+        name: 'upgrade',
+        authorization: [
+          {
+            actor: account.name,
+            permission: account.authority
+          }
+        ],
+        data: { from: account.name }
+      }
+    ]
+  })
+}
+
 export const info = {
   async buy({ account = null, amount = 0, memo = '' }) {
     return transfer({ account, amount, memo: 'buy-' + memo })

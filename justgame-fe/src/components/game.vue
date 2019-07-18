@@ -22,22 +22,22 @@
               <div class="_1fto3" @click="login" v-if="account">{{account.name}}</div>
               <div class="_1fto3" @click="login" v-else>登录</div>
             </div>
-            <li class="_2IsC_">
+            <!--<li class="_2IsC_">
               <div class="_3H5Ef">
                 <div class="_1fto3">EN</div>
               </div>
-            </li>
+            </li>-->
           </div>
         </div>
         <div class="_3ILQJ">
-          <div class="_3rG6Z"><span class="_2-ZJJ"><span>11</span>:<span>59</span>:<span>54</span></span>
+          <div class="_3rG6Z"><span class="_2-ZJJ"><span>{{countdown.h}}</span>:<span>{{countdown.m}}</span>:<span>{{countdown.s}}</span></span>
           </div>
         </div>
         <div class="_38Cx_">
           <div class="_2gSpK"><i class="_2TWU5"></i>
             <div>
               <p>用户收益</p>
-              <p class="_26FMC _38zqW">1,306,690.00 <i class="icon-tron"></i></p>
+              <p class="_26FMC _38zqW">{{global.pool_prize}} <i class="icon-tron"></i></p>
               <p class="num">$ 37,306.00</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3FOJt"></i>
@@ -138,9 +138,9 @@
                     <p class="num">0.00</p><span>EOS 在你的盒子里</span></div>
                 </div>
                 <div class="_20_oo">
-                  <div class="_11eyq"><button class="_2koZ-" @click="open"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
+                  <div class="_11eyq"><button class="_2koZ-" @click="open" :disabled="myBox.length <= 0"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
                     <p>你的奖励</p><span class="num">0.00 EOS</span></div>
-                  <div class="_11eyq"><button class="_2koZ-" disabled="" @click="upgrade"><i></i><span>升级盒子</span></button>
+                  <div class="_11eyq"><button class="_2koZ-" @click="upgrade" :disabled="myBox.length <= 0"><i></i><span>升级盒子</span></button>
                     <p>股权增加</p><span class="num">0% +</span></div>
                 </div>
               </div>
@@ -148,8 +148,8 @@
             <!--推广-->
             <div v-if="tab === 'PROMOTE'">
               <div class="UjuEG">
-                <div class="rGAjU">https://justgame.vip/TCWg6pCqmcwHXcaEFJEZdKcU7QdeZsSCsQ</div>
-                <div class="sOtJx">复制</div>
+                <div class="rGAjU">{{shareUrl}}</div>
+                <div class="sOtJx" @click="copyText">复制</div>
                 <div class="oGArP">我的收益：<span class="num">0</span> EOS</div>
               </div>
             </div>
@@ -164,7 +164,7 @@
           <div class="_3Eaez"></div>
           <div class="_1nKxi"><i class="_1T42u" @click="ruleModal=false"></i>
             <div class="_20swm">
-              <h3>justgame.vip的游戏介绍</h3>
+              <h3>eos justgame的游戏介绍</h3>
               <ul>
                 <li>游戏的核心是礼物盒，玩家购买一个或多个盒子后，可以分得后续够买盒子的部分金额作为分红，礼物盒初始价值为 0，之后会持续升值。</li>
                 <li>游戏开始倒计时 12 小时，玩家每买或开或升级一个盒子增加 30s，不超过上限 12 小时，直到最后没有人操作，计时器归 0，游戏结束，玩家开始领取收益。</li>
@@ -198,7 +198,7 @@
                   <ul>
                     <li>EOS 版本，您需要首先安装
                       <a href="https://chrome.google.com/webstore/detail/tronlink%EF%BC%88%E6%B3%A2%E5%AE%9D%E9%92%B1%E5%8C%85%EF%BC%89/ibnejdfjmmkpcnlpebklmnkoeoihofec"
-                        target="_blank">Scatter 插件</a>，每个的礼物盒价格为 0.001 EOS； </li>
+                        target="_blank">Scatter 插件</a>，每个的礼物盒价格为 0.01 EOS； </li>
                     <!--<li>ETH 版本，您需要首先安装
                       <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">MetaMask 插件</a>，每个的礼物盒价格为
                       0.0025 ETH；</li>
@@ -240,7 +240,7 @@
 <script>
   import api from '@/utils/eos';
   import APIs from '@/utils/scatter';
-  import { transfer, open, info } from '@/utils/contract'
+  import { transfer, open, upgrade, info } from '@/utils/contract'
 
   import "../assets/just_files/0.43a745e1.css"
   import "../assets/just_files/bundle.d0788cb5.css"
@@ -268,28 +268,87 @@
         global: {
           big_prize: 0,
           last100_prize: 0,
+          pool_prize: 0,
         },
-        myBox: []
+        endTime: '2019-07-18T15:10:00',
+        myBox: [],
+        countdown: {
+          h: '00',
+          m: '00',
+          s: '00'
+        },
+        timer: null,
+        socket: null
       };
     },
-
     computed: {
       amount() {
         return this.mul(this.num, 0.01);
+      },
+      shareUrl() {
+        return `https://eos-justgame.cn/${this.account ? this.account.name : ''} `
       }
     },
     created(){
       //页面刚进入时开启长连接
-      this.initWebSocket()
+      this.initWebSocket();
+      this.timer = setInterval(()=>{
+        this.initCountdown()
+      }, 1000);
     },
     destroyed() {
-      //页面销毁时关闭长连接
-      // this.websocketclose();
+      clearInterval(this.timer);
+      this.socket.close();
     },
     methods: {
-      initWebSocket(){
+      copyText() {
+        this.$copyText(this.shareUrl).then(
+            () => {
+              console.log('复制成功');
+              this.$message.success('复制成功');
+            },
+            () => {
+              console.log('复制失败');
+              this.$message.error('复制失败');
+            }
+        )
+      },
+      initCountdown() {
+        const M1 = 60;
+        const H1 = 60 * M1;
+        const H12 = 12 * H1;
+        let timestamp1 = Date.parse(new Date());
+        let timestamp2 = Date.parse(new Date(this.endTime));
+        let diff = (timestamp2 - timestamp1) / 1000;
+        if (diff <= 0)  {
+          this.countdown = {
+            h: '00',
+            m: '00',
+            s: '00'
+          }
+          return;
+        }
+        if (diff > H12) {
+          this.countdown = {
+            h: '12',
+            m: '00',
+            s: '00'
+          }
+        } else {
+          let h = parseInt(diff/H1).toString();
+          let m = parseInt((diff % H1) / M1).toString();
+          let s = (diff - h * H1 - m * M1).toString();
+          this.countdown =  {
+            h: h.padStart(2, '0'),
+            m: m.padStart(2, '0'),
+            s: s.padStart(2, '0'),
+          }
+        }
+      },
+      initWebSocket() {
         //初始化weosocket
         let socket = require('socket.io-client')('https://wss.eos-justgame.cn');
+        this.socket = socket;
         socket.on('connect', function () {
           console.log('ws connect')
         });
@@ -302,18 +361,23 @@
           this.history = msg.history;
           this.last100_player = msg.last100_player;
           this.global = msg.global;
+          this.endTime = msg.global.end;
         });
       },
       open() {
         open({ account: this.account })
       },
       upgrade() {
+        upgrade({ account: this.account })
       },
       switchTab(e) {
         this.tab = e.target.getAttribute('data-name')
       },
       transfer() {
-        transfer({ account: this.account, amount: this.amount, memo: 'buy-' }).then((data) => console.log(data)).catch((error) => console.log(error))
+        let urlStr = location.pathname.substr(location.pathname.lastIndexOf('/') + 1);
+        let memo = urlStr ? 'buy-' + urlStr :'buy-';
+        console.log(memo);
+        transfer({ account: this.account, amount: this.amount, memo }).then((data) => console.log(data)).catch((error) => console.log(error))
       },
       async login() {
         console.log('login');

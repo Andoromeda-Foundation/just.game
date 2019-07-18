@@ -16,6 +16,9 @@ import 'element-ui/lib/theme-chalk/alert.css';
 import 'element-ui/lib/theme-chalk/message.css';
 import 'element-ui/lib/theme-chalk/notification.css';
 import './style.css';
+import VueClipboard from 'vue-clipboard2'
+
+Vue.use(VueClipboard)
 
 library.add(faSignOutAlt, brands);
 
