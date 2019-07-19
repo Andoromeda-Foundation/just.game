@@ -5,7 +5,9 @@
       <div class="_2FNbP">
         <div class="_3HKzV">
           <ul class="vT4_t">
+<!--
             <li class="_2vjT2"><a href="https://endless.game/" target="_blank"><i></i></a></li>
+-->
             <li class="m48b6">
               <div class="_3H5Ef">
                 <div class="_1fto3" @click="ruleModal = true">规则</div>
@@ -37,19 +39,19 @@
           <div class="_2gSpK"><i class="_2TWU5"></i>
             <div>
               <p>用户收益</p>
-              <p class="_26FMC _38zqW">{{global.pool_prize}} <i class="icon-tron"></i></p>
+              <p class="_26FMC _38zqW">{{convertEOS(global.pool_prize)}} <i class="icon-tron"></i></p>
               <p class="num">$ 37,306.00</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3FOJt"></i>
             <div>
               <p>100 赢家奖励</p>
-              <p class="_26FMC _2YYit">{{global.last100_prize}} <i class="icon-tron"></i></p>
+              <p class="_26FMC _2YYit">{{convertEOS(global.last100_prize)}} <i class="icon-tron"></i></p>
               <p class="num">$ 53,175.23</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
           <div class="_2gSpK"><i class="_3AEek"></i>
             <div>
               <p>最后一人大奖</p>
-              <p class="_26FMC _33khv">{{global.big_prize}} <i class="icon-tron"></i></p>
+              <p class="_26FMC _33khv">{{convertEOS(global.big_prize)}} <i class="icon-tron"></i></p>
               <p class="num">$ 5,436.02</p>
             </div><span class="_1654l" @click="tokenModal=true">?</span></div>
         </div>
@@ -73,11 +75,11 @@
                   </ul>
                   <ul>
                     <li class="_2gMYE">{{item.user}}</li>
-                    <li class="num LzVNT">{{item.pay}}</li>
+                    <li class="num LzVNT">{{playerReward(item)}}</li>
                     <li><i class="icon-tron"></i></li>
                   </ul>
                   <ul>
-                    <li class="_2gMYE"><i><span class="num">+{{item.mask.toFixed(2)}}</span> EOS</i></li>
+                    <li class="_2gMYE"><i><span class="num">+{{convertEOS(global.last100_prize)}}</span> EOS</i></li>
                     <li class="LzVNT vy-zN"><i>忠诚奖励</i></li>
                   </ul>
                 </div>
@@ -86,7 +88,7 @@
             </div>
             <div class="_1keCl">
               <p>总投入量</p>
-              <p class="num V4xnh">{{global.total_fund}} <i class="icon-tron"></i></p>
+              <p class="num V4xnh">{{convertEOS(global.total_fund)}} <i class="icon-tron"></i></p>
             </div>
           </div>
           <div class="_3QV-A">
@@ -124,7 +126,7 @@
             <div v-if="tab === 'EARNINGS'">
               <div class="t9Lfd">
                 <div class="_2x61W"><i class="icon-box _1MDIr"></i>
-                  <div class="_1J4O_"><i>0 礼物盒你可以购买</i></div>
+                  <div class="_1J4O_"><i>{{buyNum}} 礼物盒你可以购买</i></div>
                   <div class="_3R_3Z">
                     <div class="ywlSf"><input type="text" v-model="num">
                       <div class="_1lTLB"><i class="icon-box"></i></div>
@@ -133,14 +135,14 @@
                   </div><button :disabled="false" @click="transfer">发送 EOS</button></div>
                 <div class="AFb5V">
                   <div class="dvjGH"><i></i>
-                    <p class="num">{{myBox.length}}</p><span>拥有的盒子数</span></div>
+                    <p class="num">{{player.box}}</p><span>拥有的盒子数</span></div>
                   <div class="dvjGH"><i></i>
-                    <p class="num">0.00</p><span>EOS 在你的盒子里</span></div>
+                    <p class="num">{{yourEos}}</p><span>EOS 在你的盒子里</span></div>
                 </div>
                 <div class="_20_oo">
-                  <div class="_11eyq"><button class="_2koZ-" @click="open" :disabled="player.box > 0"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
+                  <div class="_11eyq"><button class="_2koZ-" @click="open" :disabled="player.box <= 0"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
                     <p>你的奖励</p><span class="num">{{yourReward}} EOS</span></div>
-                  <div class="_11eyq"><button class="_2koZ-" @click="upgrade" :disabled="player.box > 0"><i></i><span>升级盒子</span></button>
+                  <div class="_11eyq"><button class="_2koZ-" @click="upgrade" :disabled="player.box <= 0"><i></i><span>升级盒子</span></button>
                     <p>股权增加</p><span class="num">{{stakeIncrease}} +</span></div>
                 </div>
               </div>
@@ -245,6 +247,9 @@
   import "../assets/just_files/0.43a745e1.css"
   import "../assets/just_files/bundle.d0788cb5.css"
 
+  const UNIT_PRICE = 0.01;
+
+
   export default {
     mounted() {
       //setInterval(this.fetchOrders, 1000);
@@ -266,10 +271,11 @@
         last100_player: [],
         history: [],
         global: {
+          mask: 0,
           total_fund: 0,
           big_prize: 0,
           last100_prize: 0,
-          pool_prize: 0,
+          pool_prize: 0
         },
         endTime: '2019-07-18T15:10:00',
         myBox: [],
@@ -288,7 +294,7 @@
     },
     computed: {
       amount() {
-        return this.mul(this.num, 0.01);
+        return this.mul(this.num, UNIT_PRICE);
       },
       shareUrl() {
         return `https://eos-justgame.cn/${this.account ? this.account.name : ''} `
@@ -296,12 +302,22 @@
       // 你的奖励
       yourReward() {
         const { global, player } = this;
-        return (global.mask * player.box / 10000 - player.mask) / 10000
+        let r = (global.mask * player.box / 10000 - player.mask) / 10000
+        return r.toFixed(2)
+      },
+      yourEos() {
+        return (this.yourReward / 2).toFixed(2);
       },
       // 股权增加
       stakeIncrease() {
         const { global, player } = this;
-        return (global.mask * player.box / 10000 - player.mask) / global.box_value  / player.box
+        let r = (global.mask * player.box / 10000 - player.mask) / global.box_value  / player.box
+        return r.toFixed(2) * 100 + '%'
+      },
+      buyNum() {
+        if (this.balance === 0) return 0;
+        let b = parseFloat(this.balance.replace('eos', 0));
+        return parseInt(b / UNIT_PRICE)
       }
     },
     created(){
@@ -316,6 +332,14 @@
       this.socket.close();
     },
     methods: {
+      playerReward(player) {
+        const { global } = this;
+        let r = (global.mask * player.box / 10000 - player.mask) / 10000
+        return r.toFixed(2)
+      },
+      convertEOS(num) {
+        return (parseFloat(num) / 10000)
+      },
       copyText() {
         this.$copyText(this.shareUrl).then(
             () => {
@@ -333,7 +357,7 @@
         const H1 = 60 * M1;
         const H12 = 12 * H1;
         let timestamp1 = Date.parse(new Date());
-        let timestamp2 = Date.parse(new Date(this.endTime));
+        let timestamp2 = Date.parse(new Date(this.endTime)) + 8 * 60 * 60 * 1000;
         let diff = (timestamp2 - timestamp1) / 1000;
         if (diff <= 0)  {
           this.countdown = {
@@ -399,11 +423,12 @@
         console.log('login');
         const connected = await APIs.connect()
         console.log(connected);
-        /*if (!connected) {
+        if (!connected) {
+          this.$message.error('请先安装scatter');
           const account = APIs.account();
           console.log(account);
           APIs.suggestNetworkAsync().then(added => console.log('🛸Scatter🛸 suggest network result: ', added))
-        }*/
+        }
         const identity = await APIs.loginScatterAsync();
         const account = identity.accounts.find(({ blockchain }) => blockchain === 'eos');
         this.account = account;
@@ -421,7 +446,8 @@
         let player = await info.getMyBoxAsync(this.account.name);
         if (player.length <= 0) {
           this.player = {
-
+            box: 0,
+            mask: 0
           }
         } else {
           this.player = player[0]
