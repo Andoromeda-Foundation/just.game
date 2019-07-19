@@ -86,7 +86,7 @@
             </div>
             <div class="_1keCl">
               <p>总投入量</p>
-              <p class="num V4xnh">3733400 <i class="icon-tron"></i></p>
+              <p class="num V4xnh">{{global.total_fund}} <i class="icon-tron"></i></p>
             </div>
           </div>
           <div class="_3QV-A">
@@ -138,10 +138,10 @@
                     <p class="num">0.00</p><span>EOS 在你的盒子里</span></div>
                 </div>
                 <div class="_20_oo">
-                  <div class="_11eyq"><button class="_2koZ-" @click="open" :disabled="myBox.length <= 0"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
-                    <p>你的奖励</p><span class="num">0.00 EOS</span></div>
-                  <div class="_11eyq"><button class="_2koZ-" @click="upgrade" :disabled="myBox.length <= 0"><i></i><span>升级盒子</span></button>
-                    <p>股权增加</p><span class="num">0% +</span></div>
+                  <div class="_11eyq"><button class="_2koZ-" @click="open" :disabled="player.box > 0"><i></i><span>打开盒子 <span class="num">(2X)</span></span></button>
+                    <p>你的奖励</p><span class="num">{{yourReward}} EOS</span></div>
+                  <div class="_11eyq"><button class="_2koZ-" @click="upgrade" :disabled="player.box > 0"><i></i><span>升级盒子</span></button>
+                    <p>股权增加</p><span class="num">{{stakeIncrease}} +</span></div>
                 </div>
               </div>
             </div>
@@ -266,12 +266,17 @@
         last100_player: [],
         history: [],
         global: {
+          total_fund: 0,
           big_prize: 0,
           last100_prize: 0,
           pool_prize: 0,
         },
         endTime: '2019-07-18T15:10:00',
         myBox: [],
+        player: {
+          box: 0,
+          mask: 0
+        },
         countdown: {
           h: '00',
           m: '00',
@@ -287,6 +292,16 @@
       },
       shareUrl() {
         return `https://eos-justgame.cn/${this.account ? this.account.name : ''} `
+      },
+      // 你的奖励
+      yourReward() {
+        const { global, player } = this;
+        return (global.mask * player.box / 10000 - player.mask) / 10000
+      },
+      // 股权增加
+      stakeIncrease() {
+        const { global, player } = this;
+        return (global.mask * player.box / 10000 - player.mask) / global.box_value  / player.box
       }
     },
     created(){
@@ -358,6 +373,7 @@
         });
 
         socket.on('gamestatus', (msg) => {
+          console.log(msg);
           this.history = msg.history;
           this.last100_player = msg.last100_player;
           this.global = msg.global;
@@ -402,7 +418,14 @@
         await this.getMyBox();
       },
       async getMyBox() {
-        this.myBox = await info.getMyBoxAsync(this.account.name);
+        let player = await info.getMyBoxAsync(this.account.name);
+        if (player.length <= 0) {
+          this.player = {
+
+          }
+        } else {
+          this.player = player[0]
+        }
       },
       fetchOrders() {
         api.getActions('joetothemoon', -1, -20).then(({ actions }) => {
